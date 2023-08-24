@@ -27,7 +27,7 @@ public class MyTestConnectFour {
     }
 
     private void assertEquals(String string, String string2, String whoIsWinner) {
-        System.out.printf("message: %s, result: %B", string, whoIsWinner == "Yellow");
+        System.out.printf("message: %s, val1: %s, val2: %s, result: %B \n\n\n", string, string2, whoIsWinner ,whoIsWinner.equals(string2));
     }
 
     public void secondTest()

@@ -1,46 +1,31 @@
 package ConnectFour;
 
 import java.util.List;
-import java.util.Map;
 
 public class ConnectFour {
-    private static Integer[][] board = new Integer[6][7];
-    private static Character[] columns = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
-    private static Integer turn = 0;
-    private static Integer RED = 0;
-    private static Integer YELLOW = 1;
     
     public static String whoIsWinner(List<String> piecesPositionList) {
-        piecesPositionList.stream()
-            .map(ConnectFour::parseMove)
-            .forEach(ConnectFour::placePiece);
-        for (Integer[] row : board) {
-            for (Integer cell : row) {
-                System.out.print(cell + " ");
+        var board = new String[7][6];
+        for (String piece : piecesPositionList)
+        {
+            int row, column = piece.charAt(0) - 'A';
+            for (row = 0; board[column][row] != null; row++);
+
+            board[column][row] = piece.substring(2);
+            for (var move : new int[][] { { 0, 1 }, { 1, 0 }, { 1, 1 }, { 1, -1 } })
+            {
+                for (int n = 0, f = 1; f >= -1; f -= 2)
+                {
+                    for (int c = column, r = row; c >= 0 && c < 7 && r >= 0 && r < 6 && piece.substring(2).equals(board[c][r]); c += move[0] * f, r += move[1] * f)
+                    {
+                        if (++n > 4)
+                        {
+                            return piece.substring(2);
+                        }
+                    }
+                }
             }
-            System.out.println();
         }
         return "Draw";
     }
-
-    private static Map<Integer, Integer> parseMove(String string1) {
-        String[] move = string1.split("_");
-        Integer player = move[2].equals("Red") ? RED : YELLOW;
-        Integer position = columns.toString().indexOf(move[0]);
-        return Map.of(position, player);
-    }
-
-    private static void placePiece(Map<Integer, Integer> object1) {
-        if (turn < 42) {
-            Integer position = object1.keySet().iterator().next();
-            Integer player = object1.values().iterator().next();
-            Integer row = 5;
-            while (board[row][position] != null) {
-                row--;
-            }
-            board[row][position] = player;
-            turn++;
-        }
-    }
-    
 }
